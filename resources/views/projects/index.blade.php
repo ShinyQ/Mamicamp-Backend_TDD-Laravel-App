@@ -6,10 +6,13 @@
   </head>
   <body>
     <ul>
-      @foreach($projects as $project)
-        <li>{{ $project->title }}</li>
-        <li>{{ $project->description }}</li>
-      @endforeach
+      <h1>BirdBoard</h1>
+      @forelse($projects as $project)
+        <li><a href="{{ $project->path() }}">{{ $project->title }}</a></li>
+        <br>
+      @empty
+        <li>No Data Yet</li>
+      @endforelse
     </ul>
   </body>
 </html>
