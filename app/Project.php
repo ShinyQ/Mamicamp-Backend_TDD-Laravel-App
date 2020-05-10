@@ -12,4 +12,9 @@ class Project extends Model
     {
       return "/projects/{$this->id}";
     }
+
+    public function owner($value='')
+    {
+      return $this->belongsTo(User::class);
+    }
 }
