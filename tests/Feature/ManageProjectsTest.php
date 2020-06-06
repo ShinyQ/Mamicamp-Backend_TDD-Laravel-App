@@ -3,10 +3,10 @@
 namespace Tests\Feature;
 
 use App\Project;
+use Facades\Tests\Setup\ProjectFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use Facades\Tests\Setup\ProjectFactory;
 
 class ManageProjectsTest extends TestCase
 {
@@ -29,18 +29,15 @@ class ManageProjectsTest extends TestCase
     {
         $this->signIn();
         $this->get('/projects/create')->assertStatus(200);
-
         $attributes = [
             'title' => $this->faker->sentence,
             'description' => $this->faker->sentence,
             'notes' => 'General notes here.'
         ];
 
-        $project = Project::where($attributes)->first();
-
         $response = $this->post('/projects', $attributes);
+        $project = Project::where($attributes)->first();
         $response->assertRedirect($project->path());
-
         $this->get($project->path())
             ->assertSee($attributes['title'])
             ->assertSee($attributes['description'])
@@ -51,12 +48,22 @@ class ManageProjectsTest extends TestCase
     function a_user_can_update_a_project()
     {
         $project = ProjectFactory::create();
-
         $this->actingAs($project->owner)
              ->patch($project->path(), $attributes = ['title' => 'Changed', 'description' => 'Changed', 'notes' => 'Changed'])
              ->assertRedirect($project->path());
-             
+
         $this->get($project->path().'/edit')->assertOk();
+        $this->assertDatabaseHas('projects', $attributes);
+    }
+
+    /** @test */
+    function a_user_can_update_a_projects_general_notes()
+    {
+        $project = ProjectFactory::create();
+
+        $this->actingAs($project->owner)
+            ->patch($project->path(), $attributes = ['notes' => 'Changed']);
+
         $this->assertDatabaseHas('projects', $attributes);
     }
 
@@ -64,7 +71,6 @@ class ManageProjectsTest extends TestCase
     public function a_user_can_view_their_project()
     {
         $project = ProjectFactory::create();
-
         $this->actingAs($project->owner)
             ->get($project->path())
             ->assertSee($project->title)
