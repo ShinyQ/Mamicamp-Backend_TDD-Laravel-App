@@ -12,6 +12,8 @@ class Task extends Model
      * @var array
      */
     protected $guarded = [];
+    protected $touches = ['project'];
+
 
     public function project()
     {
