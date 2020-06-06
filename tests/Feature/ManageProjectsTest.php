@@ -2,11 +2,11 @@
 
 namespace Tests\Feature;
 
+use App\Project;
+use Facades\Tests\Setup\ProjectFactory;
 use Tests\TestCase;
 use Illuminate\Foundation\Testing\WithFaker;
 use Illuminate\Foundation\Testing\RefreshDatabase;
-use App\Project;
-use Facades\Tests\Setup\ProjectFactory;
 
 class ManageProjectsTest extends TestCase
 {
@@ -38,7 +38,9 @@ class ManageProjectsTest extends TestCase
         ];
 
         $response = $this->post('/projects', $attributes);
+
         $project = Project::where($attributes)->first();
+
         $response->assertRedirect($project->path());
 
         $this->get($project->path())
@@ -57,6 +59,7 @@ class ManageProjectsTest extends TestCase
              ->assertRedirect($project->path());
 
         $this->get($project->path().'/edit')->assertOk();
+
         $this->assertDatabaseHas('projects', $attributes);
     }
 
@@ -86,7 +89,9 @@ class ManageProjectsTest extends TestCase
     public function an_authenticated_user_cannot_view_the_projects_of_others()
     {
         $this->signIn();
+
         $project = factory('App\Project')->create();
+
         $this->get($project->path())->assertStatus(403);
     }
 
@@ -94,7 +99,9 @@ class ManageProjectsTest extends TestCase
     public function an_authenticated_user_cannot_update_the_projects_of_others()
     {
         $this->signIn();
+
         $project = factory('App\Project')->create();
+
         $this->patch($project->path())->assertStatus(403);
     }
 
@@ -102,7 +109,9 @@ class ManageProjectsTest extends TestCase
     public function a_project_requires_a_title()
     {
         $this->signIn();
+
         $attributes = factory('App\Project')->raw(['title' => '']);
+
         $this->post('/projects', $attributes)->assertSessionHasErrors('title');
     }
 
@@ -110,7 +119,9 @@ class ManageProjectsTest extends TestCase
     public function a_project_requires_a_description()
     {
         $this->signIn();
+
         $attributes = factory('App\Project')->raw(['description' => '']);
+
         $this->post('/projects', $attributes)->assertSessionHasErrors('description');
     }
 }

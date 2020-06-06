@@ -14,12 +14,12 @@ class CreateActivitiesTable extends Migration
     public function up()
     {
         Schema::create('activities', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('project_id')
-                        ->constrained()
-                        ->onDelete('cascade');
-            $table->string('description');
-            $table->timestamps();
+          $table->id('id');
+          $table->unsignedBigInteger('project_id');
+          $table->string('description');
+          $table->timestamps();
+
+          $table->foreign('project_id')->references('id')->on('projects')->onDelete('cascade');
         });
     }
 

@@ -15,6 +15,7 @@ class ProjectTasksTest extends TestCase
     public function guests_cannot_add_tasks_to_projects()
     {
         $project = factory('App\Project')->create();
+
         $this->post($project->path() . '/tasks')->assertRedirect('login');
     }
 
@@ -24,6 +25,7 @@ class ProjectTasksTest extends TestCase
         $this->signIn();
 
         $project = factory('App\Project')->create();
+
         $this->post($project->path() . '/tasks', ['body' => 'Test task'])
             ->assertStatus(403);
 
@@ -93,6 +95,7 @@ class ProjectTasksTest extends TestCase
         $this->withoutExceptionHandling();
 
         $project = ProjectFactory::withTasks(1)->create();
+
         $this->actingAs($project->owner)
             ->patch($project->tasks[0]->path(), [
                 'body' => 'changed',
@@ -114,6 +117,7 @@ class ProjectTasksTest extends TestCase
     public function a_task_requires_a_body()
     {
         $project = ProjectFactory::create();
+
         $attributes = factory('App\Task')->raw(['body' => '']);
 
         $this->actingAs($project->owner)

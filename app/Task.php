@@ -6,26 +6,13 @@ use Illuminate\Database\Eloquent\Model;
 
 class Task extends Model
 {
-    /**
-     * Attributes to guard against mass assignment.
-     *
-     * @var array
-     */
     protected $guarded = [];
+
     protected $touches = ['project'];
 
     protected $casts = [
         'completed' => 'boolean'
     ];
-
-    protected static function boot()
-    {
-        parent::boot();
-
-        static::created(function ($task) {
-            $task->project->recordActivity('created_task');
-        });
-    }
 
     public function complete()
     {
@@ -34,18 +21,20 @@ class Task extends Model
         $this->project->recordActivity('completed_task');
     }
 
+    public function incomplete()
+    {
+        $this->update(['completed' => false]);
+
+        $this->project->recordActivity('incompleted_task');
+    }
+
     public function project()
     {
-       return $this->belongsTo(Project::class);
+        return $this->belongsTo(Project::class);
     }
 
     public function path()
     {
-       return "/projects/{$this->project->id}/tasks/{$this->id}";
-    }
-
-    public function incomplete()
-    {
-        $this->update(['completed' => false]);
+        return "/projects/{$this->project->id}/tasks/{$this->id}";
     }
 }
