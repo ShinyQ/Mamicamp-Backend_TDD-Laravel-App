@@ -8,9 +8,11 @@ use Illuminate\Validation\Rule;
 
 class ProjectInvitationRequest extends FormRequest
 {
+    protected $errorBag = 'invitations';
+
     public function authorize()
     {
-        return Gate::allows('update', $this->route('project'));
+        return Gate::allows('manage', $this->route('project'));
     }
 
     public function rules()
