@@ -40,44 +40,31 @@
                     </h1>
 
                     <div>
-                        <!-- Right Side Of Navbar -->
-                           <div class="flex items-center ml-auto">
-                            <!-- Authentication Links -->
+
+                        <div class="flex items-center ml-auto">
                             @guest
                                 <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+
                                 @if (Route::has('register'))
-                                     <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
                                 @endif
                             @else
-                            <theme-switcher></theme-switcher>
+                                <theme-switcher></theme-switcher>
 
-                            <a
-                                class="flex items-center text-default no-underline text-sm"
-                                href="#" role="button"
-                                data-toggle="dropdown"
-                                aria-haspopup="true"
-                                aria-expanded="false"
-                                v-pre
-                            >
-                                <img width="35"
-                                     class="rounded-full mr-3"
-                                     src="{{ gravatar_url(auth()->user()->email) }}">
+                                <a
+                                    class="flex items-center text-default no-underline text-sm"
+                                    href="#" role="button"
+                                    data-toggle="dropdown"
+                                    aria-haspopup="true"
+                                    aria-expanded="false"
+                                    v-pre
+                                >
+                                    <img width="35"
+                                         class="rounded-full mr-3"
+                                         src="{{ gravatar_url(auth()->user()->email) }}">
 
-                                        Kurniadi Ahmad Wijaya &nbsp;
-                                    </a>
-                                </li>
-
-                                <div class="dropdown-menu dropdown-menu-right" aria-labelledby="navbarDropdown">
-                                    <a class="text-muted no-underline hover:underline" href="{{ route('logout') }}"
-                                       onclick="event.preventDefault();
-                                                     document.getElementById('logout-form').submit();">
-                                      {{ __('Logout') }}
-                                    </a>
-
-                                    <form id="logout-form" action="{{ route('logout') }}" method="POST" style="display: none;">
-                                        @csrf
-                                    </form>
-                                </div>
+                                    Kurniadi A. Wijaya
+                                </a>
                             @endguest
                         </div>
                     </div>

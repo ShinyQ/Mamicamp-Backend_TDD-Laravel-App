@@ -24,5 +24,8 @@
         "tailwindcss": "^0.7.4",
         "vue": "^2.5.17",
         "vue-template-compiler": "^2.6.10"
+    },
+    "dependencies": {
+        "vue-js-modal": "^2.0.0-rc.3"
     }
 }
